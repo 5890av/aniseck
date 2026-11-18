@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as WatchlistRouteImport } from './routes/watchlist'
 import { Route as MediaIdRouteImport } from './routes/media.$id'
@@ -17,6 +18,11 @@ import { Route as MediaIdRouteImport } from './routes/media.$id'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ActivityRoute = ActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SearchRoute = SearchRouteImport.update({
@@ -37,12 +43,14 @@ const MediaIdRoute = MediaIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/media/$id': typeof MediaIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/media/$id': typeof MediaIdRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/media/$id': typeof MediaIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/search' | '/watchlist' | '/media/$id'
+  fullPaths: '/' | '/activity' | '/search' | '/watchlist' | '/media/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/search' | '/watchlist' | '/media/$id'
-  id: '__root__' | '/' | '/search' | '/watchlist' | '/media/$id'
+  to: '/' | '/activity' | '/search' | '/watchlist' | '/media/$id'
+  id: '__root__' | '/' | '/activity' | '/search' | '/watchlist' | '/media/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActivityRoute: typeof ActivityRoute
   SearchRoute: typeof SearchRoute
   WatchlistRoute: typeof WatchlistRoute
   MediaIdRoute: typeof MediaIdRoute
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/activity': {
+      id: '/activity'
+      path: '/activity'
+      fullPath: '/activity'
+      preLoaderRoute: typeof ActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActivityRoute: ActivityRoute,
   SearchRoute: SearchRoute,
   WatchlistRoute: WatchlistRoute,
   MediaIdRoute: MediaIdRoute,

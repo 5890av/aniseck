@@ -3,6 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Star } from "lucide-react";
 import { fetchMedia, stripHtml, titleOf } from "@/lib/anilist";
 import { setEntry, STATUSES, useWatchlist } from "@/lib/watchlist";
+import { RatingInput } from "@/components/RatingInput";
+import { MediaCardView, Row, RowItem } from "@/components/MediaCardView";
+
+const REL: Record<string, string> = { PREQUEL: "Prequel", SEQUEL: "Sequel", SIDE_STORY: "Side story", ADAPTATION: "Adaptation", SOURCE: "Source", ALTERNATIVE: "Alternative", PARENT: "Parent", SPIN_OFF: "Spin-off" };
+const ORDER = ["PREQUEL", "SEQUEL", "PARENT", "SIDE_STORY", "SPIN_OFF", "ADAPTATION", "SOURCE", "ALTERNATIVE"];
 
 export const Route = createFileRoute("/media/$id")({
   head: () => ({ meta: [
@@ -47,6 +52,7 @@ function Detail() {
                 </button>
               ))}
             </div>
+            <div className="mt-4"><RatingInput media={card} score={list[m.id]?.score ?? null} /></div>
           </div>
         </div>
         <section className="mt-10 grid gap-10 lg:grid-cols-[1fr_380px]">
@@ -61,6 +67,10 @@ function Detail() {
             </div>
           )}
         </section>
+        {(() => {
+          const rels = m.relations.edges.filter((e) => ORDER.includes(e.relationType)).sort((a, b) => ORDER.indexOf(a.relationType) - ORDER.indexOf(b.relationType));
+          return rels.length ? <div className="mt-10"><Row title="Related">{rels.map((e) => <RowItem key={e.node.id}><MediaCardView m={e.node} badge={REL[e.relationType]} myScore={list[e.node.id]?.score} /></RowItem>)}</Row></div> : null;
+        })()}
         <section className="my-10">
           <h2 className="mb-4 font-display text-xl font-bold text-foreground">Characters</h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">

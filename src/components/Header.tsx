@@ -14,6 +14,7 @@ export function Header() {
         <nav className="flex gap-1">
           <Link to="/" className={link} activeProps={active} activeOptions={{ exact: true }}>Home</Link>
           <Link to="/watchlist" className={link} activeProps={active}>My Watchlist</Link>
+          <Link to="/activity" className={link} activeProps={active}>Activity</Link>
         </nav>
         <form className="order-last w-full sm:order-none sm:ml-auto sm:w-72" onSubmit={(e) => { e.preventDefault(); if (q.trim()) navigate({ to: "/search", search: { q: q.trim(), type: "ANIME" } }); }}>
           <label className="flex items-center gap-2 rounded-full border border-input bg-card px-3 py-2 focus-within:ring-2 focus-within:ring-ring">

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { STATUSES, useWatchlist, type WatchStatus } from "@/lib/watchlist";
+import { RatingInput } from "@/components/RatingInput";
 import { CardGrid, MediaCardView } from "@/components/MediaCardView";
 
 export const Route = createFileRoute("/watchlist")({
@@ -28,7 +29,7 @@ function Watchlist() {
           </button>
         ))}
       </div>
-      {items.length ? <CardGrid>{items.map((e) => <MediaCardView key={e.media.id} m={e.media} />)}</CardGrid>
+      {items.length ? <CardGrid>{items.map((e) => <div key={e.media.id} className="space-y-2"><MediaCardView m={e.media} myScore={e.score} /><RatingInput media={e.media} score={e.score} compact /></div>)}</CardGrid>
         : <p className="text-muted-foreground">Nothing here yet. <Link to="/" className="font-semibold text-primary">Browse shows</Link> and add some.</p>}
     </main>
   );
